@@ -1,16 +1,16 @@
 window.SITE_CONFIG = {
-  schoolName: "Your School Name",
-  logoPath: "logo.svg",
+  schoolName: "Rao's Rukmani Devi Public School",
+  logoPath: "school-logo.svg",
   colours: {
-    primary: "#173e3b",
-    primaryHover: "#0e2c29",
-    accent: "#e4be78",
-    background: "#faf9f5",
+    primary: "#650d0d",
+    primaryHover: "#4d0a0a",
+    accent: "#957f3f",
+    background: "#faf8f3",
     surface: "#ffffff",
-    soft: "#eef3ef",
-    text: "#20332f",
-    muted: "#52645e",
-    border: "#d6dfd8",
+    soft: "#f4ebe0",
+    text: "#2b1d1a",
+    muted: "#6e5d54",
+    border: "#e3d8ca",
     error: "#a12b26"
   }
 };

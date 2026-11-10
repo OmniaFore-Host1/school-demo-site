@@ -12,8 +12,9 @@ window.SITE_CONTENT = {
   home: {
     title: "Home",
     menuLabel: "Home",
-    heroHeading: "Welcome to our school",
-    tagline: "Learning with care, from kindergarten to senior secondary.",
+    session: "Session 2026–27",
+    heroHeading: "Learning today. Leading tomorrow.",
+    tagline: "Committed to holistic education that develops academic ability, confidence, character, creativity and responsible citizenship.",
     quickLinksHeading: "Quick links",
     quickLinks: [
       { label: "Admissions", href: "admissions.html" },
@@ -22,42 +23,43 @@ window.SITE_CONTENT = {
     ],
     noticesHeading: "Notices",
     notices: [
-      "Admissions are open.",
-      "The school library is open for readers.",
-      "Join us for the school annual day."
+      "No notices published. New notices will appear here."
     ]
   },
   about: {
     title: "About",
     menuLabel: "About",
     visionHeading: "Our vision",
-    vision: "Our school aims to help every child learn with curiosity and confidence, and grow into a kind and capable person.",
+    vision: "To nurture confident, capable and compassionate learners prepared to contribute positively to society.",
+    missionHeading: "Our mission",
+    mission: "To provide a safe, respectful and stimulating learning environment where every child can discover potential and grow.",
     principalHeading: "A message from the principal",
-    principalMessage: "Welcome to our school. We look forward to learning with your child, and to working closely with every family.",
+    principalMessage: "Your school fills this in",
     principalNameLabel: "Principal",
-    principalName: "Your school fills this in",
+    principalName: "Mr. Johnson Thomas",
     affiliationHeading: "Affiliation",
     affiliationLabel: "Affiliation number",
-    affiliation: "Your school fills this in"
+    affiliation: "1030686",
+    schoolCodeLabel: "School code",
+    schoolCode: "50654"
   },
   academics: {
     title: "Academics",
     menuLabel: "Academics",
     introHeading: "Learning at our school",
-    intro: "Our school offers learning from kindergarten to senior secondary, with care for each child at every stage.",
+    intro: "Explore the school's learning journey from the foundational years to senior secondary education.",
     stagesHeading: "Stages",
     stages: [
-      { heading: "KG", text: "Play, stories and gentle routines help young children settle in and enjoy learning." },
-      { heading: "Primary", text: "Children build strong foundations through stories, play and guided activities." },
-      { heading: "Middle", text: "Children explore new ideas, ask questions and learn to work on their own and with others." },
-      { heading: "Secondary", text: "Students deepen their understanding and prepare for the years ahead with steady guidance." },
-      { heading: "Senior Secondary", text: "Students choose a stream and study in greater depth, with support for their next steps." }
+      { heading: "Foundation", text: "Nursery – Class V. Strong foundations through joyful learning, language, numeracy, creativity and activity-based experiences." },
+      { heading: "Middle", text: "Classes VI – VIII. Concept building, curiosity, skills and balanced scholastic and co-scholastic development." },
+      { heading: "Secondary", text: "Classes IX – X. Structured academic preparation with focused subject learning and examination readiness." },
+      { heading: "Senior Secondary", text: "Classes XI – XII. Stream-based learning with Science, Commerce and Humanities pathways." }
     ],
     streamsHeading: "Senior Secondary streams",
     streams: [
-      { heading: "Science", text: "Students explore the world around them through observation, enquiry and practical work." },
-      { heading: "Commerce", text: "Students learn how businesses work and how people make choices about money and trade." },
-      { heading: "Humanities", text: "Students explore people, places and ideas, and learn to think and write clearly." }
+      { heading: "Science", text: "Your school fills this in" },
+      { heading: "Commerce", text: "Your school fills this in" },
+      { heading: "Humanities", text: "Your school fills this in" }
     ],
     syllabusLabel: "Official CBSE syllabus",
     syllabusUrl: "https://cbseacademic.nic.in",
@@ -69,11 +71,7 @@ window.SITE_CONTENT = {
     menuLabel: "Admissions",
     stepsHeading: "How to apply",
     steps: [
-      "Fill in the enquiry form.",
-      "Visit the school and meet the team.",
-      "Talk with us about your child.",
-      "Share the documents the school asks for.",
-      "Confirm the admission with the school."
+      "For class-wise availability, eligibility, admission procedure and current fee details, please contact the school office or submit the online enquiry form."
     ],
     formHeading: "Enquiry form",
     formNote: "Demo form: nothing is sent or stored.",
@@ -92,18 +90,23 @@ window.SITE_CONTENT = {
     heading: "Mandatory Disclosure",
     expandLabel: "Expand",
     collapseLabel: "Collapse",
+    sarasLabel: "CBSE SARAS affiliation details",
+    sarasUrl: "https://saras.cbse.gov.in/SARAS/AffiliatedList/AfflicationDetails/1030686",
     sections: [
       {
         title: "A General Information",
         rows: [
-          { label: "Name of the school", value: "Your school fills this in" },
-          { label: "Affiliation number", value: "Your school fills this in" },
-          { label: "School code", value: "Your school fills this in" },
-          { label: "Address", value: "Your school fills this in" },
-          { label: "Principal name", value: "Your school fills this in" },
-          { label: "Principal qualification", value: "Your school fills this in" },
+          { label: "Name of the school", value: "Rao's Rukmani Devi Public School" },
+          { label: "Affiliation number", value: "1030686" },
+          { label: "School code", value: "50654" },
+          { label: "Address", value: "N.H. 44, Village Lolri, Post Deori, Tehsil Tendukheda, District Narsinghpur, Madhya Pradesh – 487330" },
+          { label: "Principal name", value: "Mr. Johnson Thomas" },
+          { label: "Principal qualification", value: "M.A. English, B.Ed." },
           { label: "School email", value: "Your school fills this in" },
-          { label: "Contact details", value: "Your school fills this in" }
+          { label: "Contact details", value: "07793-276722, 6266220549" },
+          { label: "Trust / Society", value: "RAOS RUKMANI DEVI SHIKSHA SAMITI" },
+          { label: "Affiliation period", value: "01/04/2023 – 31/03/2028" },
+          { label: "Year of foundation", value: "2004" }
         ]
       },
       {
@@ -132,7 +135,7 @@ window.SITE_CONTENT = {
       {
         title: "D Staff (Teaching)",
         rows: [
-          { label: "Principal", value: "Your school fills this in" },
+          { label: "Principal", value: "Mr. Johnson Thomas" },
           { label: "Total number of teachers", value: "Your school fills this in" },
           { label: "Teacher section ratio", value: "Your school fills this in" },
           { label: "Special educator", value: "Your school fills this in" },
@@ -142,12 +145,12 @@ window.SITE_CONTENT = {
       {
         title: "E School Infrastructure",
         rows: [
-          { label: "Total campus area", value: "Your school fills this in" },
-          { label: "Number and size of classrooms", value: "Your school fills this in" },
-          { label: "Number and size of laboratories", value: "Your school fills this in" },
-          { label: "Internet facility", value: "Your school fills this in" },
-          { label: "Number of girls toilets", value: "Your school fills this in" },
-          { label: "Number of boys toilets", value: "Your school fills this in" }
+          { label: "Total campus area", value: "34,000 sq. m." },
+          { label: "Number and size of classrooms", value: "56 classrooms" },
+          { label: "Number and size of laboratories", value: "6 — Biology, Mathematics, Computer, Chemistry, Composite Science and Physics" },
+          { label: "Internet facility", value: "Yes" },
+          { label: "Number of girls toilets", value: "15" },
+          { label: "Number of boys toilets", value: "15" }
         ]
       }
     ]
@@ -157,10 +160,7 @@ window.SITE_CONTENT = {
     menuLabel: "Parent Corner",
     noticesHeading: "Notices",
     notices: [
-      "A parent meeting will be held at the school.",
-      "Please check the fee notice shared by the school.",
-      "The school will share details of the next school event.",
-      "Please follow the school holiday notice."
+      "No notices published. New notices will appear here."
     ],
     calendarHeading: "Calendar",
     calendarNote: "Your school fills this in",
@@ -175,11 +175,10 @@ window.SITE_CONTENT = {
     feeNote: "Your school fills this in",
     feeHeaders: ["Class", "Fee per month", "Fee per year"],
     feeRows: [
-      ["KG", "-", "-"],
-      ["Primary", "-", "-"],
-      ["Middle", "-", "-"],
-      ["Secondary", "-", "-"],
-      ["Senior Secondary", "-", "-"]
+      ["Nursery – Class V", "-", "-"],
+      ["Classes VI – VIII", "-", "-"],
+      ["Classes IX – X", "-", "-"],
+      ["Classes XI – XII", "-", "-"]
     ]
   },
   campus: {
@@ -187,12 +186,10 @@ window.SITE_CONTENT = {
     menuLabel: "Campus",
     heading: "Facilities and activities",
     cards: [
-      { title: "Library", text: "A quiet place to read, study and borrow books." },
-      { title: "Science Lab", text: "A safe space for practical work and observation." },
-      { title: "Computer Lab", text: "Computers for learning, research and creative work." },
-      { title: "Sports", text: "Games and physical activity on the school ground." },
-      { title: "Art Room", text: "Space to draw, paint and make things." },
-      { title: "Music Room", text: "Space to sing, play and listen to music." }
+      { title: "Laboratories", text: "Science, mathematics and computer learning facilities support practical and applied learning." },
+      { title: "Sports", text: "Physical education and sports support teamwork, discipline, confidence and holistic development." },
+      { title: "Transport", text: "School transport operates on defined routes and established stops for student convenience." },
+      { title: "Health & Wellbeing", text: "Student wellbeing and first-aid support are important parts of the school environment." }
     ]
   },
   contact: {
@@ -200,12 +197,17 @@ window.SITE_CONTENT = {
     menuLabel: "Contact",
     heading: "Contact the school",
     addressLabel: "Address",
-    address: "Your school fills this in",
+    address: "N.H. 44, Village Lolri, Post Deori, Tehsil Tendukheda, District Narsinghpur, Madhya Pradesh – 487330",
     phoneLabel: "Phone",
-    phone: "Your school fills this in",
+    phone: "07793-276722, 6266220549",
     emailLabel: "Email",
-    email: "Your school fills this in"
+    email: "Your school fills this in",
+    websiteLabel: "School website",
+    websiteUrl: "https://rukmanidevi.ac.in/",
+    mapsLabel: "View on Google Maps",
+    mapsUrl: "https://maps.app.goo.gl/xiSMC2yJ3KC3mpCq5"
   },
+  images: [],
   footer: {
     text: "All rights reserved."
   }

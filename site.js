@@ -35,16 +35,9 @@
   function icon(kind) {
     const paths = {
       arrow: ["M5 12h14m-6-6 6 6-6 6"],
-      external: ["M14 4h6v6m0-6L10 14", "M10 4H4v16h16v-6"],
       menu: ["M4 6h16M4 12h16M4 18h16"],
       close: ["m5 5 14 14M19 5 5 19"],
-      chevron: ["m6 9 6 6 6-6"],
-      book: ["M12 6C9 4 6 4 3 5v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"],
-      science: ["M9 3h6m-5 0v7L4 19a1 1 0 0 0 1 2h14a1 1 0 0 0 1-2l-6-9V3M7 15h10"],
-      computer: ["M3 4h18v13H3V4Zm5 17h8m-4-4v4"],
-      sports: ["M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 0v20M2 12h20M5 5c7 3 7 11 14 14M19 5C12 8 12 16 5 19"],
-      art: ["m8 15 9-12 4 4-12 9", "M8 15c-4-2-5 3-5 6 3 0 8-1 6-5"],
-      music: ["M10 17V5l10-2v12M10 9l10-2", "M10 17c0-3-6-2-6 1s6 2 6-1Zm10-2c0-3-6-2-6 1s6 2 6-1Z"]
+      chevron: ["m6 9 6 6 6-6"]
     };
     const svg = svgElement("svg", {
       viewBox: "0 0 24 24",
@@ -92,24 +85,22 @@
     return shell;
   }
 
+  function schoolLogo(className, alt = "") {
+    const logo = element("img", className);
+    logo.src = config.logoPath;
+    logo.alt = alt;
+    logo.width = 325;
+    logo.height = 336;
+    logo.decoding = "async";
+    return logo;
+  }
+
   function renderHeader() {
     document.body.prepend(link(content.ui.skipLink, "#main-content", "skip-link"));
     const header = document.getElementById("site-header");
     const inner = element("div", "container header-inner");
     const brand = link(undefined, "index.html", "brand");
-    const mark = element("span", "brand-mark");
-    mark.setAttribute("aria-hidden", "true");
-    if (config.logoPath) {
-      const logo = element("img");
-      logo.src = config.logoPath;
-      logo.alt = "";
-      logo.width = 38;
-      logo.height = 38;
-      mark.append(logo);
-    } else if (config.logoText) {
-      mark.textContent = config.logoText;
-    }
-    brand.append(mark, element("span", "school-name", config.schoolName));
+    brand.append(schoolLogo("brand-logo"), element("span", "school-name", config.schoolName));
 
     const navigation = element("nav", "site-navigation");
     navigation.id = "primary-navigation";
@@ -118,7 +109,6 @@
       const item = element("li");
       const anchor = link(content[key].menuLabel, href, "nav-link");
       if (key === page) anchor.setAttribute("aria-current", "page");
-      if (key === "disclosure") anchor.classList.add("disclosure-link");
       item.append(anchor);
       list.append(item);
     });
@@ -127,7 +117,7 @@
     const button = element("button", "menu-button");
     button.type = "button";
     button.setAttribute("aria-controls", navigation.id);
-    const buttonLabel = element("span");
+    const buttonLabel = element("span", "visually-hidden");
     const desktop = window.matchMedia("(min-width: 64rem)");
 
     function setMenu(open) {
@@ -160,91 +150,57 @@
     header.append(inner);
   }
 
-  function schoolIllustration() {
-    const art = element("div", "hero-art");
-    art.setAttribute("aria-hidden", "true");
-    const svg = svgElement("svg", {
-      viewBox: "0 0 480 320",
-      fill: "none",
-      focusable: "false"
-    });
-    const shapes = [
-      ["circle", { cx: 257, cy: 144, r: 138, fill: "var(--background)" }],
-      ["circle", { cx: 375, cy: 58, r: 25, fill: "var(--accent)" }],
-      ["path", { d: "M29 278h422", stroke: "var(--primary)", "stroke-width": 2 }],
-      ["path", { d: "M93 277V143h294v134", fill: "var(--surface)", stroke: "var(--primary)", "stroke-width": 2 }],
-      ["path", { d: "M81 143h318l-16-17H97l-16 17Z", fill: "var(--primary)" }],
-      ["path", { d: "M167 277V122l73-47 73 47v155", fill: "var(--soft)", stroke: "var(--primary)", "stroke-width": 2 }],
-      ["path", { d: "m159 125 81-53 81 53", stroke: "var(--primary)", "stroke-width": 5, "stroke-linejoin": "round" }],
-      ["path", { d: "M217 277v-48a23 23 0 0 1 46 0v48", fill: "var(--primary)" }],
-      ["circle", { cx: 240, cy: 135, r: 18, fill: "var(--accent)", stroke: "var(--primary)", "stroke-width": 2 }],
-      ["path", { d: "M240 124v12l8 5", stroke: "var(--primary)", "stroke-width": 2, "stroke-linecap": "round" }],
-      ["path", { d: "M203 278h74l17 22H186l17-22Z", fill: "var(--accent)" }],
-      ["path", { d: "M50 278v-65m379 65v-65", stroke: "var(--primary)", "stroke-width": 3 }],
-      ["ellipse", { cx: 50, cy: 193, rx: 25, ry: 42, fill: "var(--primary)" }],
-      ["ellipse", { cx: 429, cy: 193, rx: 25, ry: 42, fill: "var(--primary)" }]
-    ];
-    shapes.forEach(([tag, attributes]) => svg.append(svgElement(tag, attributes)));
-    [113, 139, 327, 353].forEach((x) => {
-      [165, 213].forEach((y) => {
-        svg.append(svgElement("rect", {
-          x, y, width: 15, height: 26, rx: 2,
-          fill: "var(--soft)", stroke: "var(--primary)", "stroke-width": 1.5
-        }));
-      });
-    });
-    [190, 229, 268].forEach((x) => {
-      svg.append(svgElement("rect", {
-        x, y: 172, width: 22, height: 23, rx: 2,
-        fill: "var(--surface)", stroke: "var(--primary)", "stroke-width": 1.5
-      }));
-    });
-    art.append(svg);
-    return art;
-  }
-
   function renderHome() {
     const data = content.home;
+    const shell = element("div", "container page-shell home-shell");
     const hero = element("section", "hero");
-    const inner = element("div", "container hero-inner");
-    const copy = element("div", "hero-copy");
-    copy.append(
+    const inner = element("div", "hero-inner");
+    const logoCard = element("div", "card hero-logo-card");
+    logoCard.append(schoolLogo("hero-logo", config.schoolName));
+    inner.append(
+      element("p", "eyebrow", data.session),
+      logoCard,
       element("h1", "", data.heroHeading),
-      element("p", "", data.tagline),
+      element("p", "hero-tagline", data.tagline),
       link(content.ui.disclosureButton, "disclosure.html", "button", "arrow")
     );
-    inner.append(copy, schoolIllustration());
     hero.append(inner);
-    const quickLinks = section(data.quickLinksHeading, "container home-links");
+    const quickLinks = section(data.quickLinksHeading);
     const grid = element("div", "quick-grid");
     data.quickLinks.forEach((item) => {
-      grid.append(link(item.label, item.href, "quick-link", "arrow"));
+      grid.append(link(item.label, item.href, "card quick-link", "arrow"));
     });
     quickLinks.append(grid);
-    const notices = section(data.noticesHeading, "container notices-strip");
+    const notices = section(data.noticesHeading, "callout");
     notices.append(noticeList(data.notices));
-    main.append(hero, quickLinks, notices);
+    shell.append(hero, quickLinks, notices);
+    main.append(shell);
   }
 
   function renderAbout() {
     const data = content.about;
     const shell = pageShell(data.title);
-    const layout = element("div", "section-stack about-layout");
-    const vision = section(data.visionHeading, "panel vision-panel");
+    const values = element("div", "card-grid two-column");
+    const vision = section(data.visionHeading, "card");
     vision.append(element("p", "", data.vision));
-    const principal = section(data.principalHeading, "panel principal-panel");
+    const mission = section(data.missionHeading, "card");
+    mission.append(element("p", "", data.mission));
+    values.append(vision, mission);
+    const principal = section(data.principalHeading, "card principal-card");
     const principalDetails = element("dl", "principal-details");
     principalDetails.append(
       element("dt", "", data.principalNameLabel),
       element("dd", "", data.principalName)
     );
-    principal.append(element("blockquote", "", data.principalMessage), principalDetails);
-    const affiliation = section(data.affiliationHeading, "panel affiliation-panel");
-    const affiliationDetails = element("dl");
-    affiliationDetails.append(dataRow(data.affiliationLabel, data.affiliation));
+    principal.append(principalDetails, element("p", "", data.principalMessage));
+    const affiliation = section(data.affiliationHeading);
+    const affiliationDetails = element("dl", "fact-list");
+    affiliationDetails.append(
+      dataRow(data.affiliationLabel, data.affiliation),
+      dataRow(data.schoolCodeLabel, data.schoolCode)
+    );
     affiliation.append(affiliationDetails);
-    layout.append(vision, principal, affiliation);
-    shell.append(layout);
+    shell.append(values, principal, affiliation);
   }
 
   function renderAcademics() {
@@ -253,36 +209,34 @@
     const intro = section(data.introHeading, "intro");
     intro.append(element("p", "", data.intro));
     const stages = section(data.stagesHeading);
-    const list = element("div", "stage-list");
-    data.stages.forEach((item, index) => {
-      const stage = section(item.heading, "panel stage", "h3");
+    const list = element("div", "card-grid two-column");
+    data.stages.forEach((item) => {
+      const stage = section(item.heading, "card", "h3");
       stage.append(element("p", "", item.text));
-      if (index === data.stages.length - 1) {
-        const streams = section(data.streamsHeading, "stream-section", "h4");
-        const grid = element("div", "card-grid stream-grid");
-        data.streams.forEach((stream, streamIndex) => {
-          const card = element("article", "card stream-card");
-          const heading = element("h5", "", stream.heading);
-          heading.id = `stream-${streamIndex}`;
-          const syllabus = link(data.syllabusLabel, data.syllabusUrl, "text-link", "external");
-          syllabus.setAttribute("aria-describedby", heading.id);
-          card.append(heading, element("p", "", stream.text), syllabus);
-          grid.append(card);
-        });
-        streams.append(grid);
-        stage.append(streams);
-      }
       list.append(stage);
     });
     stages.append(list);
-    shell.append(intro, stages, link(data.cbseLabel, data.cbseUrl, "text-link cbse-link", "external"));
+    const streams = section(data.streamsHeading);
+    const grid = element("div", "card-grid three-column");
+    data.streams.forEach((stream) => {
+      const card = section(stream.heading, "card", "h3");
+      card.append(element("p", "", stream.text));
+      grid.append(card);
+    });
+    const resources = element("div", "resource-links");
+    resources.append(
+      link(data.syllabusLabel, data.syllabusUrl, "text-link"),
+      link(data.cbseLabel, data.cbseUrl, "text-link")
+    );
+    streams.append(grid, resources);
+    shell.append(intro, stages, streams);
   }
 
   function enquiryForm(data) {
     const form = element("form", "enquiry-form");
     form.noValidate = true;
     form.autocomplete = "off";
-    form.append(element("p", "form-note", data.formNote));
+    form.setAttribute("aria-describedby", "enquiry-note");
     const fields = [
       { name: "parent-name", label: data.parentNameLabel, type: "text" },
       { name: "phone", label: data.phoneLabel, type: "tel" },
@@ -357,22 +311,20 @@
   function renderAdmissions() {
     const data = content.admissions;
     const shell = pageShell(data.title);
-    const layout = element("div", "admissions-layout");
-    const steps = section(data.stepsHeading);
-    const list = element("ol", "steps-list");
-    data.steps.forEach((step) => list.append(element("li", "", step)));
-    steps.append(list);
-    const enquiry = section(data.formHeading, "panel");
-    enquiry.append(enquiryForm(data));
-    layout.append(steps, enquiry);
-    shell.append(layout);
+    const steps = section(data.stepsHeading, "card callout");
+    data.steps.forEach((step) => steps.append(element("p", "", step)));
+    const enquiry = section(data.formHeading, "enquiry-section");
+    const note = element("p", "section-note", data.formNote);
+    note.id = "enquiry-note";
+    enquiry.append(note, enquiryForm(data));
+    shell.append(steps, enquiry);
   }
 
   function renderDisclosure() {
     const data = content.disclosure;
     const shell = pageShell(data.heading);
     const list = element("div", "disclosure-list");
-    data.sections.forEach((item) => {
+    data.sections.forEach((item, sectionIndex) => {
       const details = element("details", "disclosure-section");
       const summary = element("summary");
       const action = element("span", "disclosure-action");
@@ -381,9 +333,9 @@
       action.append(label, icon("chevron"));
       summary.append(element("span", "disclosure-title", item.title), action);
       const rows = element("dl", "disclosure-rows");
-      item.rows.forEach((row) => rows.append(dataRow(
+      item.rows.forEach((row, rowIndex) => rows.append(dataRow(
         row.label,
-        row.label === "Name of the school" ? config.schoolName : row.value
+        sectionIndex === 0 && rowIndex === 0 ? config.schoolName : row.value
       )));
       details.append(summary, rows);
       details.addEventListener("toggle", () => {
@@ -391,57 +343,33 @@
       });
       list.append(details);
     });
-    shell.append(list);
+    shell.append(link(data.sarasLabel, data.sarasUrl, "text-link"), list);
   }
 
-  function renderParent() {
-    const data = content.parent;
-    const shell = pageShell(data.title);
-    const top = element("div", "parent-top");
-    const notices = section(data.noticesHeading, "panel");
-    notices.append(noticeList(data.notices));
-    const calendar = section(data.calendarHeading, "panel");
-    calendar.append(element("p", "section-note", data.calendarNote));
-    const columns = element("div", "calendar-columns");
-    data.calendarHeaders.forEach((header, index) => {
-      const label = element("span", "", header);
-      label.id = `calendar-column-${index}`;
-      columns.append(label);
-    });
-    const events = element("ul", "calendar-list");
-    data.calendarRows.forEach((row) => {
-      const event = element("li", "calendar-row");
-      row.forEach((value, index) => {
-        const cell = element("span", "", value);
-        cell.setAttribute("aria-describedby", `calendar-column-${index}`);
-        event.append(cell);
-      });
-      events.append(event);
-    });
-    calendar.append(columns, events);
-    top.append(notices, calendar);
-
-    const fees = section(data.feeHeading);
-    fees.firstElementChild.id = "fee-heading";
-    const note = element("p", "section-note", data.feeNote);
-    note.id = "fee-note";
+  function tableSection(key, heading, noteText, headers, rows) {
+    const wrapper = section(heading, "table-section");
+    const headingId = `${key}-heading`;
+    const noteId = `${key}-note`;
+    wrapper.firstElementChild.id = headingId;
+    const note = element("p", "section-note", noteText);
+    note.id = noteId;
     const box = element("div", "table-box");
     box.tabIndex = 0;
     box.setAttribute("role", "region");
-    box.setAttribute("aria-labelledby", "fee-heading");
-    const table = element("table", "fee-table");
-    table.setAttribute("aria-labelledby", "fee-heading");
-    table.setAttribute("aria-describedby", "fee-note");
+    box.setAttribute("aria-labelledby", headingId);
+    const table = element("table", `data-table ${key}-table`);
+    table.setAttribute("aria-labelledby", headingId);
+    table.setAttribute("aria-describedby", noteId);
     const head = element("thead");
     const headings = element("tr");
-    data.feeHeaders.forEach((header) => {
+    headers.forEach((header) => {
       const cell = element("th", "", header);
       cell.scope = "col";
       headings.append(cell);
     });
     head.append(headings);
     const body = element("tbody");
-    data.feeRows.forEach((values) => {
+    rows.forEach((values) => {
       const row = element("tr");
       values.forEach((value, index) => {
         const cell = element(index === 0 ? "th" : "td", "", value);
@@ -452,21 +380,30 @@
     });
     table.append(head, body);
     box.append(table);
-    fees.append(note, box);
-    shell.append(top, fees);
+    wrapper.append(note, box);
+    return wrapper;
+  }
+
+  function renderParent() {
+    const data = content.parent;
+    const shell = pageShell(data.title);
+    const notices = section(data.noticesHeading, "callout");
+    notices.append(noticeList(data.notices));
+    shell.append(
+      notices,
+      tableSection("calendar", data.calendarHeading, data.calendarNote, data.calendarHeaders, data.calendarRows),
+      tableSection("fee", data.feeHeading, data.feeNote, data.feeHeaders, data.feeRows)
+    );
   }
 
   function renderCampus() {
     const data = content.campus;
     const shell = pageShell(data.title);
     const facilities = section(data.heading);
-    const grid = element("div", "card-grid campus-grid");
-    const icons = ["book", "science", "computer", "sports", "art", "music"];
-    data.cards.forEach((item, index) => {
-      const card = element("article", "card");
-      const mark = element("div", "facility-icon");
-      mark.append(icon(icons[index] || "book"));
-      card.append(mark, element("h3", "", item.title), element("p", "", item.text));
+    const grid = element("div", "card-grid two-column");
+    data.cards.forEach((item) => {
+      const card = section(item.title, "card", "h3");
+      card.append(element("p", "", item.text));
       grid.append(card);
     });
     facilities.append(grid);
@@ -483,7 +420,12 @@
       dataRow(data.phoneLabel, data.phone),
       dataRow(data.emailLabel, data.email)
     );
-    contact.append(details);
+    const links = element("div", "button-row");
+    links.append(
+      link(data.websiteLabel, data.websiteUrl, "button"),
+      link(data.mapsLabel, data.mapsUrl, "button button-secondary")
+    );
+    contact.append(details, links);
     shell.append(contact);
   }
 
