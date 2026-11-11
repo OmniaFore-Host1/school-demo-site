@@ -7,7 +7,7 @@ html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   color-scheme: light;
-  scroll-padding-top: 6rem;
+  scroll-padding-top: var(--header-height, 6rem);
 }
 
 body {
@@ -29,6 +29,7 @@ body {
 
 button,
 input,
+select,
 textarea {
   font: inherit;
 }
@@ -189,6 +190,7 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-width: 44px;
   min-height: 44px;
   padding: 0.5rem;
@@ -196,6 +198,7 @@ img {
   border-radius: 0.5rem;
   background: var(--surface);
   color: var(--primary);
+  white-space: nowrap;
 }
 
 .menu-button:hover {
@@ -251,6 +254,45 @@ img {
   min-width: 0;
 }
 
+.site-main [id] {
+  scroll-margin-top: 1rem;
+}
+
+.noscript-fallback {
+  background: #faf8f3;
+  color: #2b1d1a;
+}
+
+.noscript-fallback h1,
+.noscript-fallback a {
+  color: #650d0d;
+}
+
+.page-navigation {
+  border-block: 1px solid var(--border);
+  padding-block: 1rem;
+}
+
+.page-navigation-heading {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.page-navigation-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.page-navigation-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-block: 0.5rem;
+}
+
 .page-shell {
   display: grid;
   gap: 2rem;
@@ -300,6 +342,56 @@ img {
 
 .hero-tagline {
   max-width: 58ch;
+}
+
+.school-codes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1.5rem;
+  color: var(--muted);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 34rem;
+}
+
+.hero-actions .button {
+  flex: 1 1 14rem;
+}
+
+.stats-strip {
+  border-block: 1px solid var(--border);
+  padding-block: 1rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.stat-label {
+  font-weight: 400;
+}
+
+.stat-value {
+  order: -1;
+  color: var(--primary);
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: 1.375rem;
+  line-height: 1.25;
 }
 
 .card,
@@ -369,8 +461,35 @@ img {
   color: var(--primaryHover);
 }
 
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 26rem;
+}
+
+.contact-actions .button {
+  flex: 1 1 8rem;
+  width: auto;
+}
+
+.phone-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phone-links a {
+  white-space: nowrap;
+}
+
 .card-grid,
-.quick-grid {
+.quick-grid,
+.pathway-grid {
   display: grid;
   gap: 1rem;
 }
@@ -417,10 +536,89 @@ img {
   color: var(--primary);
 }
 
+.about-intro,
+.principal-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.photo-layout,
+.photo-copy,
+.stages-layout,
+.photo-grid {
+  display: grid;
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.photo-layout > *,
+.stages-layout > *,
+.photo-grid > * {
+  min-width: 0;
+}
+
+.school-photo {
+  min-width: 0;
+  margin: 0;
+  break-inside: avoid;
+}
+
+.school-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.school-photo figcaption {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+
+.card-with-photo .school-photo {
+  margin-top: 1rem;
+}
+
+.facility-photos {
+  margin-top: 1.5rem;
+}
+
 .principal-details {
   display: grid;
+  align-content: start;
   gap: 0.5rem;
-  margin-block: 1rem;
+}
+
+.principal-details dd + dt {
+  margin-top: 0.5rem;
+}
+
+.staff-list {
+  display: grid;
+  column-gap: 1.5rem;
+}
+
+.staff-list .data-row,
+.staff-list .data-row:first-child {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  gap: 1rem;
+  padding-block: 1rem;
+}
+
+.staff-list dd {
+  color: var(--primary);
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: 1.75rem;
+}
+
+.staff-list .demo-badge {
+  margin-bottom: 0;
+}
+
+.stream-alternative {
+  margin-top: 1rem;
 }
 
 dt {
@@ -463,6 +661,7 @@ dd {
 }
 
 .enquiry-section,
+.tc-lookup-section,
 .contact-details {
   width: 100%;
   max-width: 48rem;
@@ -473,9 +672,39 @@ dd {
   color: var(--muted);
 }
 
-.enquiry-form {
+.demo-label,
+.demo-badge {
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--soft);
+  color: var(--primary);
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.demo-label {
+  margin-bottom: 1rem;
+}
+
+.demo-badge {
+  display: block;
+  margin-block: 0.5rem;
+}
+
+.enquiry-form,
+.tc-lookup-form {
   display: grid;
   gap: 1rem;
+}
+
+.tc-lookup-result:not(:empty) {
+  margin-top: 1rem;
 }
 
 .field {
@@ -489,6 +718,7 @@ dd {
 }
 
 .field input,
+.field select,
 .field textarea {
   width: 100%;
   min-width: 0;
@@ -534,7 +764,7 @@ dd {
   background: var(--surface);
 }
 
-.disclosure-section summary {
+.disclosure-section > summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -546,15 +776,15 @@ dd {
   list-style: none;
 }
 
-.disclosure-section summary::-webkit-details-marker {
+.disclosure-section > summary::-webkit-details-marker {
   display: none;
 }
 
-.disclosure-section summary::marker {
+.disclosure-section > summary::marker {
   content: "";
 }
 
-.disclosure-section summary:hover {
+.disclosure-section > summary:hover {
   background: var(--soft);
 }
 
@@ -595,6 +825,24 @@ dd {
   border-bottom: 0;
 }
 
+.document-record > summary {
+  min-height: 44px;
+  padding-block: 0.5rem;
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.document-record-content {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.document-record-id {
+  font-weight: 600;
+}
+
 .table-box {
   width: 100%;
   min-width: 0;
@@ -611,12 +859,14 @@ dd {
   text-align: left;
 }
 
-.calendar-table {
-  min-width: 24rem;
+.calendar-table,
+.fee-table {
+  table-layout: fixed;
+  overflow-wrap: anywhere;
 }
 
-.fee-table {
-  min-width: 34rem;
+.calendar-table th:first-child {
+  width: 36%;
 }
 
 .data-table th,
@@ -640,18 +890,59 @@ dd {
 }
 
 .site-footer {
-  padding: 1.5rem;
+  padding-block: 2rem;
   background: var(--primary);
   color: var(--surface);
-  text-align: center;
 }
 
 .footer-inner {
-  padding: 0;
+  display: grid;
+  gap: 1.5rem;
 }
 
-.footer-inner p {
+.site-footer a {
+  color: inherit;
+}
+
+.site-footer :focus-visible {
+  outline-color: var(--surface);
+}
+
+.footer-school-name {
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.footer-address {
+  margin-top: 0.5rem;
+  font-style: normal;
+}
+
+.footer-address .phone-links {
+  margin-top: 0.5rem;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-links [aria-current="page"] {
+  font-weight: 700;
+  text-decoration-thickness: 2px;
+}
+
+.footer-copyright {
+  grid-column: 1 / -1;
   max-width: none;
+  border-top: 1px solid var(--accent);
+  padding-top: 1.5rem;
+  text-align: center;
 }
 
 @media (min-width: 48rem) {
@@ -677,12 +968,28 @@ dd {
     font-size: 1.25rem;
   }
 
-  .two-column {
+  .two-column,
+  .pathway-grid,
+  .staff-list,
+  .photo-layout {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .card-with-photo {
+    grid-row: span 3;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .principal-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
+
   .three-column,
-  .quick-grid {
+  .quick-grid,
+  .photo-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -700,6 +1007,11 @@ dd {
     gap: 1rem;
   }
 
+  .tc-lookup-form {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
   .resource-links,
   .button-row {
     flex-direction: row;
@@ -707,13 +1019,14 @@ dd {
   }
 
   .footer-inner {
-    padding: 0;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    column-gap: 3rem;
   }
 }
 
 @media (min-width: 64rem) {
-  html {
-    scroll-padding-top: 10rem;
+  .stages-layout {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   }
 
   .header-inner {
@@ -734,5 +1047,48 @@ dd {
 
   .nav-link {
     white-space: nowrap;
+  }
+
+  .pathway-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .staff-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  .site-header {
+    position: static;
+  }
+
+  .disclosure-action {
+    display: none;
+  }
+
+  .demo-label,
+  .demo-badge {
+    display: block !important;
+    background: white;
+    color: black;
+    border-color: black;
+    break-inside: avoid;
+    break-after: avoid;
+  }
+
+  .disclosure-section > summary,
+  .document-record > summary,
+  .section-heading {
+    break-after: avoid;
+  }
+
+  .data-row {
+    break-inside: avoid;
+  }
+
+  .disclosure-section::details-content,
+  .document-record::details-content {
+    content-visibility: visible;
   }
 }
