@@ -37,6 +37,7 @@
       arrow: ["M5 12h14m-6-6 6 6-6 6"],
       menu: ["M4 6h16M4 12h16M4 18h16"],
       close: ["m5 5 14 14M19 5 5 19"],
+      up: ["M12 19V5m-6 6 6-6 6 6"],
       chevron: ["m6 9 6 6 6-6"]
     };
     const svg = svgElement("svg", {
@@ -96,6 +97,7 @@
   }
 
   function renderPageNavigation() {
+    if (page !== "disclosure" && page !== "parent") return;
     const navigation = element("nav", "page-navigation");
     const heading = element("h2", "page-navigation-heading", content.ui.onThisPage);
     heading.id = "page-navigation-heading";
@@ -110,8 +112,11 @@
     main.querySelector(".page-shell").firstElementChild.after(navigation);
   }
 
-  function demoLabel(inline = false, label = content.ui.demoLabel) {
-    return element(inline ? "span" : "p", inline ? "demo-badge" : "demo-label", label);
+  function markDemo(node) {
+    const heading = node.querySelector(".section-heading");
+    const row = element("div", "section-heading-row");
+    heading.replaceWith(row);
+    row.append(heading, element("span", "demo-badge", content.ui.demoLabel));
   }
 
   function factValue(key) {
@@ -119,10 +124,9 @@
     return Array.isArray(value) ? value.join(", ") : String(value);
   }
 
-  function dataRow(label, value, demo = false, demoText) {
+  function dataRow(label, value) {
     const row = element("div", "data-row");
     const term = element("dt", "", label);
-    if (demo) term.append(demoLabel(true, demoText));
     const description = element("dd");
     if (value !== undefined) description.append(value);
     row.append(term, description);
@@ -133,7 +137,6 @@
     const list = element("ul", "notice-list");
     content.notices.forEach((notice) => {
       const item = element("li");
-      if (notice.demo) item.append(demoLabel(true));
       item.append(element("p", "", notice.text));
       list.append(item);
     });
@@ -157,19 +160,30 @@
     return logo;
   }
 
+  function photoImage(photo, eager = false) {
+    const image = element("img");
+    image.src = photo.src;
+    image.alt = photo.alt;
+    image.width = photo.width;
+    image.height = photo.height;
+    image.loading = eager ? "eager" : "lazy";
+    image.decoding = "async";
+    if (eager) image.fetchPriority = "high";
+    return image;
+  }
+
+  function schoolPhoto(photo) {
+    const figure = element("figure", "school-photo");
+    figure.append(photoImage(photo), element("figcaption", "", photo.caption));
+    return figure;
+  }
+
   function photosFor(placement) {
-    return content.images.filter((photo) => photo.placements.includes(placement)).map((photo) => {
-      const figure = element("figure", "school-photo");
-      const image = element("img");
-      image.src = photo.src;
-      image.alt = photo.alt;
-      image.width = photo.width;
-      image.height = photo.height;
-      image.loading = "lazy";
-      image.decoding = "async";
-      figure.append(image, element("figcaption", "", photo.caption));
-      return figure;
-    });
+    return content.images.filter((photo) => photo.placements.includes(placement)).map(schoolPhoto);
+  }
+
+  function photoNamed(src) {
+    return content.images.find((photo) => photo.src === src);
   }
 
   function renderHeader() {
@@ -203,6 +217,8 @@
 
     function setMenu(open) {
       navigation.hidden = !open;
+      header.classList.toggle("is-menu-open", open && !desktop.matches);
+      if (open) header.classList.remove("is-hidden");
       button.setAttribute("aria-expanded", String(open));
       buttonLabel.textContent = open ? content.ui.menuClose : content.ui.menuOpen;
       button.replaceChildren(icon(open ? "close" : "menu"), buttonLabel);
@@ -229,6 +245,7 @@
     header.addEventListener("focusout", (event) => {
       if (!desktop.matches && !header.contains(event.relatedTarget)) setMenu(false);
     });
+    header.addEventListener("focusin", () => header.classList.remove("is-hidden"));
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && !desktop.matches && !navigation.hidden) {
         event.preventDefault();
@@ -259,9 +276,12 @@
     const data = content.home;
     const shell = element("div", "container page-shell home-shell");
     const hero = element("section", "hero");
+    const stage = element("div", "hero-stage");
     const inner = element("div", "hero-inner");
+    const identity = element("div", "hero-identity");
     const logoCard = element("div", "card hero-logo-card");
-    logoCard.append(schoolLogo("hero-logo", config.schoolName));
+    logoCard.append(schoolLogo("hero-logo"));
+    identity.append(logoCard, element("p", "hero-school-name", config.schoolName));
     const codes = element("p", "school-codes");
     codes.append(
       element("span", "", `${data.affiliationLabel} ${factValue("affiliation")}`),
@@ -275,13 +295,17 @@
     );
     inner.append(
       element("p", "eyebrow", data.session),
-      logoCard,
+      identity,
       element("h1", "", data.heroHeading),
       element("p", "hero-tagline", data.tagline),
-      codes,
-      actions
+      actions,
+      codes
     );
-    hero.append(inner);
+    const photo = photoNamed("images/assembly.svg");
+    const media = element("div", "hero-media");
+    media.append(photoImage(photo, true));
+    stage.append(inner, media);
+    hero.append(stage, element("p", "hero-caption", photo.caption));
     const stats = section(data.statsHeading, "stats-strip", "h2", "school-at-a-glance");
     const statsList = element("dl", "stats-grid");
     data.stats.forEach((item) => {
@@ -308,6 +332,7 @@
     });
     quickLinks.append(grid);
     const notices = section(data.noticesHeading, "callout", "h2", "notices");
+    if (content.notices.some((notice) => notice.demo)) markDemo(notices);
     notices.append(noticeList());
     shell.append(hero, stats, philosophy, pathways, quickLinks, notices);
     main.append(shell);
@@ -322,6 +347,7 @@
     intro.append(introText, ...photosFor("about.intro"));
     const values = philosophyCards();
     const principal = section(data.principalHeading, "", "h2", "principals-message");
+    if (data.principalMessageDemo) markDemo(principal);
     const principalLayout = element("div", "principal-layout");
     const principalDetails = element("dl", "card principal-details");
     principalDetails.append(
@@ -331,22 +357,23 @@
       element("dd", "", data.principalQualification)
     );
     const message = element("div", "callout principal-message");
-    if (data.principalMessageDemo) message.append(demoLabel(false, data.principalMessageDemoLabel));
+    if (data.principalMessageDemo) message.append(element("p", "section-note", data.principalMessageDemoLabel));
     message.append(element("p", "", data.principalMessage));
     principalLayout.append(principalDetails, message);
     principal.append(principalLayout);
     const staff = section(data.staffHeading, "", "h2", "staff");
+    if (data.staffRows.some((row) => row.demo)) markDemo(staff);
     const staffList = element("dl", "staff-list");
-    data.staffRows.forEach((row) => staffList.append(dataRow(row.label, row.value, row.demo)));
+    data.staffRows.forEach((row) => staffList.append(dataRow(row.label, row.value)));
     staff.append(
       element("p", "section-note", data.staffNote.replace("{classrooms}", factValue("classrooms"))),
       staffList
     );
     const alumni = section(data.alumniHeading, "", "h2", "alumni");
+    if (data.alumniProfiles.some((profile) => profile.demo)) markDemo(alumni);
     const alumniProfiles = element("div", "card-grid two-column");
     data.alumniProfiles.forEach((profile) => {
       const card = section(data.alumniProfileLabel, "card", "h3");
-      if (profile.demo) card.append(demoLabel());
       card.append(element("p", "", profile.text));
       alumniProfiles.append(card);
     });
@@ -366,9 +393,11 @@
     const shell = pageShell(data.title);
     const intro = section(data.introHeading, "intro");
     intro.append(element("p", "", data.intro));
+    const banner = element("div", "academics-banner");
+    banner.append(...photosFor("academics.stages"));
+    intro.append(banner);
     const stages = section(data.stagesHeading, "", "h2", "stages");
-    const stagesLayout = element("div", "stages-layout");
-    const list = element("div", "card-grid two-column");
+    const list = element("div", "card-grid academic-stages");
     data.stages.forEach((item) => {
       const stage = section(item.heading, "card academic-stage", "h3");
       stage.id = item.id;
@@ -381,15 +410,14 @@
       }
       list.append(stage);
     });
-    stagesLayout.append(list, ...photosFor("academics.stages"));
-    stages.append(stagesLayout);
+    stages.append(list);
     const streams = section(data.streamsHeading, "", "h2", "senior-secondary-streams");
+    if (data.streams.some((stream) => stream.demo)) markDemo(streams);
     streams.append(element("p", "section-note", data.streamsNote));
     const grid = element("div", "card-grid three-column");
     data.streams.forEach((stream) => {
       const card = section(stream.heading, "card", "h3");
       const description = element("p", "", stream.text);
-      if (stream.demo) description.prepend(demoLabel(true));
       card.append(description);
       if (stream.alternative) card.append(element("p", "stream-alternative", stream.alternative));
       grid.append(card);
@@ -401,7 +429,7 @@
     );
     streams.append(grid, resources);
     const books = section(data.booksHeading, "", "h2", "sample-book-list");
-    if (data.booksDemo) books.append(demoLabel());
+    if (data.booksDemo) markDemo(books);
     books.append(element("p", "section-note", data.booksNote));
     const bookGrid = element("div", "card-grid three-column");
     data.books.forEach((book) => {
@@ -528,19 +556,19 @@
   function renderAdmissions() {
     const data = content.admissions;
     const shell = pageShell(data.title);
-    const steps = section(data.stepsHeading, "card callout", "h2", "how-to-apply");
-    const stepsLayout = element("div", "photo-layout");
+    const layout = element("div", "split-layout admissions-layout");
+    const steps = section(data.stepsHeading, "card callout admissions-sidebar", "h2", "how-to-apply");
     const stepsText = element("div", "photo-copy");
     data.steps.forEach((step) => stepsText.append(element("p", "", step)));
-    stepsLayout.append(stepsText, ...photosFor("admissions.how-to-apply"));
-    steps.append(stepsLayout);
+    steps.append(stepsText, contactActions(), schoolPhoto(photoNamed("images/classroom-empty.svg")));
     const enquiry = section(data.formHeading, "enquiry-section", "h2", "enquiry-form");
     const note = element("p", "section-note", data.formNote);
     note.id = "enquiry-note";
     const requiredNote = element("p", "section-note", data.requiredNote);
     requiredNote.id = "enquiry-required-note";
     enquiry.append(note, requiredNote, enquiryForm(data));
-    shell.append(contactActions(), steps, enquiry);
+    layout.append(steps, enquiry);
+    shell.append(layout);
   }
 
   function documentCatalogueRecord(recordId) {
@@ -562,6 +590,24 @@
     const data = content.disclosure;
     const shell = pageShell(data.heading);
     const list = element("div", "disclosure-list");
+    list.id = "disclosure-sections";
+    const controls = element("div", "disclosure-controls");
+    const toggleAll = element("button", "button button-secondary", content.ui.expandAll);
+    toggleAll.type = "button";
+    toggleAll.setAttribute("aria-controls", list.id);
+    const sections = [];
+
+    function syncToggleAll() {
+      const allOpen = sections.every((details) => details.open);
+      toggleAll.textContent = allOpen ? content.ui.collapseAll : content.ui.expandAll;
+    }
+
+    toggleAll.addEventListener("click", () => {
+      const open = !sections.every((details) => details.open);
+      sections.forEach((details) => { details.open = open; });
+      syncToggleAll();
+    });
+    controls.append(element("p", "", data.summary), toggleAll);
     data.sections.forEach((item) => {
       const details = element("details", "disclosure-section");
       details.id = `disclosure-${item.key}`;
@@ -572,9 +618,13 @@
       action.setAttribute("aria-hidden", "true");
       const label = element("span", "", data.expandLabel);
       action.append(label, icon("chevron"));
+      const heading = element("h2", "disclosure-heading");
       const title = element("span", "disclosure-title", item.title);
-      if (item.demo) title.append(demoLabel(true));
-      summary.append(title, action);
+      if (item.demo || item.rows.some((row) => row.demo)) {
+        title.append(element("span", "demo-badge", content.ui.demoLabel));
+      }
+      heading.append(title, action);
+      summary.append(heading);
       const rows = element("dl", "disclosure-rows");
       item.rows.forEach((row) => {
         const value = row.key === "school-name" ? config.schoolName
@@ -582,35 +632,20 @@
           : row.recordId ? documentCatalogueRecord(row.recordId)
           : row.href ? link(row.value, row.href, "text-link")
           : row.fact ? factValue(row.fact) + (row.suffix || "") : row.value;
-        const node = dataRow(row.label, value, row.demo, row.demoLabel);
+        const node = dataRow(row.label, value);
+        if (row.demo && row.demoLabel) node.lastElementChild.append(element("p", "data-note", row.demoLabel));
         node.id = `${details.id}-${row.key}`;
         rows.append(node);
       });
       details.append(summary, rows);
       details.addEventListener("toggle", () => {
         label.textContent = details.open ? data.collapseLabel : data.expandLabel;
+        syncToggleAll();
       });
+      sections.push(details);
       list.append(details);
     });
-    shell.append(link(data.sarasLabel, data.sarasUrlBase + factValue("affiliation"), "text-link"), list);
-
-    function openLinkedSection() {
-      let id;
-      try {
-        id = decodeURIComponent(window.location.hash.slice(1));
-      } catch {
-        return;
-      }
-      const target = document.getElementById(id);
-      const details = target && target.closest("details.disclosure-section");
-      if (!details) return;
-      details.open = true;
-      details.scrollIntoView({ block: "start" });
-    }
-
-    window.addEventListener("hashchange", openLinkedSection);
-    // Wait for the page navigation and footer before positioning a direct link.
-    requestAnimationFrame(openLinkedSection);
+    shell.append(link(data.sarasLabel, data.sarasUrlBase + factValue("affiliation"), "text-link"), controls, list);
 
     // Print all rows and their demo labels, then restore the reader's open sections.
     let printState;
@@ -631,7 +666,7 @@
     const headingId = `${key}-heading`;
     const noteId = `${key}-note`;
     wrapper.firstElementChild.id = headingId;
-    if (demo) wrapper.append(demoLabel());
+    if (demo) markDemo(wrapper);
     const note = element("p", "section-note", noteText);
     note.id = noteId;
     const box = element("div", "table-box");
@@ -667,7 +702,7 @@
 
   function transferCertificateLookup(data) {
     const lookup = section(data.heading, "tc-lookup-section", "h2", "tc-lookup");
-    if (data.demo) lookup.append(demoLabel());
+    if (data.demo) markDemo(lookup);
     const note = element("p", "section-note", data.note);
     note.id = "tc-lookup-note";
     const form = element("form", "tc-lookup-form");
@@ -702,6 +737,7 @@
     const data = content.parent;
     const shell = pageShell(data.title);
     const notices = section(data.noticesHeading, "callout", "h2", "notices");
+    if (content.notices.some((notice) => notice.demo)) markDemo(notices);
     notices.append(noticeList());
     shell.append(
       notices,
@@ -741,15 +777,23 @@
   function renderContact() {
     const data = content.contact;
     const shell = pageShell(data.title);
+    const layout = element("div", "split-layout contact-layout");
     const contact = section(data.heading, "", "h2", "contact-the-school");
+    if (data.emailDemo) markDemo(contact);
     const details = element("dl", "contact-details");
+    const email = dataRow(data.emailLabel, data.email);
+    if (data.emailDemo) email.lastElementChild.append(element("p", "data-note", data.emailDemoLabel));
     details.append(
       dataRow(data.addressLabel, data.address),
       dataRow(data.phoneLabel, phoneLinks()),
-      dataRow(data.emailLabel, data.email, data.emailDemo, data.emailDemoLabel)
+      email
     );
     contact.append(details, link(data.websiteLabel, data.websiteUrl, "text-link"));
-    shell.append(contactActions(), contact);
+    const sidebar = element("aside", "card contact-sidebar");
+    sidebar.setAttribute("aria-label", data.title);
+    sidebar.append(contactActions(), schoolPhoto(photoNamed("images/assembly.svg")));
+    layout.append(contact, sidebar);
+    shell.append(layout);
   }
 
   function renderFooter() {
@@ -770,8 +814,130 @@
       list.append(item);
     });
     navigation.append(list);
-    footer.append(details, navigation, element("p", "footer-copyright", content.footer.text));
+    const copyright = `© ${new Date().getFullYear()} ${config.schoolName} ${content.footer.text}`;
+    footer.append(details, navigation, element("p", "footer-copyright", copyright));
     document.getElementById("site-footer").append(footer);
+  }
+
+  function enableScrolling() {
+    const header = document.getElementById("site-header");
+    const footer = document.getElementById("site-footer");
+    const viewport = element("div", "site-viewport");
+    // A separate, reserved control strip keeps the fixed button off the content.
+    header.before(viewport);
+    viewport.append(header, main, footer);
+    document.body.classList.add("scroll-enhanced");
+    const controls = element("div", "scroll-controls");
+    controls.hidden = true;
+    const backToTop = element("button", "button back-to-top", content.ui.backToTop);
+    backToTop.type = "button";
+    backToTop.prepend(icon("up"));
+    controls.append(backToTop);
+    viewport.after(controls);
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const chips = Array.from(main.querySelectorAll(".page-navigation-list a"), (anchor) => ({
+      anchor,
+      target: document.getElementById(anchor.hash.slice(1))
+    }));
+    let lastScroll = viewport.scrollTop;
+    let pending = false;
+
+    function updateCurrentSection() {
+      if (!chips.length) return;
+      const boundary = header.offsetHeight + 24;
+      let current = chips[0];
+      for (const chip of chips) {
+        if (chip.target.getBoundingClientRect().top <= boundary) current = chip;
+      }
+      if (viewport.scrollTop > 0 && viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 2) {
+        current = chips[chips.length - 1];
+      }
+      chips.forEach((chip) => {
+        if (chip === current) chip.anchor.setAttribute("aria-current", "location");
+        else chip.anchor.removeAttribute("aria-current");
+      });
+    }
+
+    function updateScroll() {
+      pending = false;
+      const current = Math.max(0, viewport.scrollTop);
+      const keepHeader = current <= header.offsetHeight
+        || header.classList.contains("is-menu-open")
+        || header.contains(document.activeElement);
+      if (keepHeader || current < lastScroll) header.classList.remove("is-hidden");
+      else if (current > lastScroll) header.classList.add("is-hidden");
+      lastScroll = current;
+      // Keep the focused control available until keyboard focus moves away.
+      controls.hidden = current <= 600 && document.activeElement !== backToTop;
+      updateCurrentSection();
+    }
+
+    function scheduleUpdate() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(updateScroll);
+    }
+
+    backToTop.addEventListener("click", () => {
+      header.classList.remove("is-hidden");
+      header.querySelector(".brand").focus({ preventScroll: true });
+      viewport.scrollTo({ top: 0, behavior: reducedMotion.matches ? "instant" : "smooth" });
+    });
+    backToTop.addEventListener("blur", scheduleUpdate);
+    viewport.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    new ResizeObserver(() => {
+      if (!controls.hidden) controls.style.setProperty("--control-height", `${backToTop.offsetHeight}px`);
+    }).observe(backToTop);
+    new ResizeObserver(scheduleUpdate).observe(main);
+
+    function targetFromHash(hash) {
+      try {
+        return document.getElementById(decodeURIComponent(hash.slice(1)));
+      } catch {
+        return null;
+      }
+    }
+
+    function goToTarget(target, focus = false) {
+      // Open every enclosing record before positioning a deep disclosure link.
+      for (let node = target; node && node !== main; node = node.parentElement) {
+        if (node.tagName === "DETAILS") node.open = true;
+      }
+      header.classList.remove("is-hidden");
+      if (focus) {
+        if (!target.hasAttribute("tabindex")) target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+      }
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: reducedMotion.matches ? "instant" : "smooth", block: "start" });
+        scheduleUpdate();
+      });
+    }
+
+    document.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const anchor = event.target.closest("a[href]");
+      if (!anchor || anchor.target || anchor.hasAttribute("download")) return;
+      const url = new URL(anchor.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || url.search !== window.location.search || !url.hash) return;
+      const target = targetFromHash(url.hash);
+      if (!target) return;
+      event.preventDefault();
+      if (window.location.hash !== url.hash) {
+        // Native hash navigation also works when the site is opened from disk.
+        window.location.hash = url.hash;
+      }
+      goToTarget(target, true);
+    });
+    window.addEventListener("hashchange", () => {
+      const target = targetFromHash(window.location.hash);
+      if (target) goToTarget(target);
+    });
+    const initialTarget = targetFromHash(window.location.hash);
+    if (initialTarget) goToTarget(initialTarget);
+    scheduleUpdate();
   }
 
   Object.entries(config.colours).forEach(([key, value]) => {
@@ -791,4 +957,5 @@
   renderers[page]();
   renderPageNavigation();
   renderFooter();
+  enableScrolling();
 })();
