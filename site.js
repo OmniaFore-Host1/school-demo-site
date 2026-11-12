@@ -281,7 +281,7 @@
     const identity = element("div", "hero-identity");
     const logoCard = element("div", "card hero-logo-card");
     logoCard.append(schoolLogo("hero-logo"));
-    identity.append(logoCard, element("p", "hero-school-name", config.schoolName));
+    identity.append(logoCard);
     const codes = element("p", "school-codes");
     codes.append(
       element("span", "", `${data.affiliationLabel} ${factValue("affiliation")}`),
@@ -814,7 +814,7 @@
       list.append(item);
     });
     navigation.append(list);
-    const copyright = `© ${new Date().getFullYear()} ${config.schoolName} ${content.footer.text}`;
+    const copyright = `© ${new Date().getFullYear()} ${config.schoolName}. ${content.footer.text}`;
     footer.append(details, navigation, element("p", "footer-copyright", copyright));
     document.getElementById("site-footer").append(footer);
   }
@@ -840,8 +840,29 @@
       anchor,
       target: document.getElementById(anchor.hash.slice(1))
     }));
+    const chipList = page === "disclosure" ? main.querySelector(".page-navigation-list") : null;
+    const compactChips = window.matchMedia("screen and (width < 600px)");
     let lastScroll = viewport.scrollTop;
     let pending = false;
+
+    function revealChip(anchor) {
+      if (!chipList || !compactChips.matches) return;
+      const listBounds = chipList.getBoundingClientRect();
+      const chipBounds = anchor.getBoundingClientRect();
+      const padding = parseFloat(getComputedStyle(chipList).scrollPaddingInlineStart) || 0;
+      const left = chipBounds.left - listBounds.left - padding;
+      const right = chipBounds.right - listBounds.right + padding;
+      // Scroll only the chip row, leaving the page position and focus unchanged.
+      if (left < 0 || right > 0) {
+        chipList.scrollBy({ left: left < 0 ? left : right, behavior: "instant" });
+      }
+    }
+
+    if (chipList) {
+      chips.forEach(({ anchor }) => {
+        anchor.addEventListener("focus", () => revealChip(anchor));
+      });
+    }
 
     function updateCurrentSection() {
       if (!chips.length) return;
@@ -857,6 +878,8 @@
         if (chip === current) chip.anchor.setAttribute("aria-current", "location");
         else chip.anchor.removeAttribute("aria-current");
       });
+      const focused = chips.find((chip) => chip.anchor === document.activeElement);
+      revealChip((focused || current).anchor);
     }
 
     function updateScroll() {

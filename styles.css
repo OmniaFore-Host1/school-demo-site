@@ -181,10 +181,12 @@ img {
   border: 1px solid var(--primary);
   border-radius: 0.5rem;
   background: var(--surface);
+  opacity: 0;
   transform: translateY(-200%);
 }
 
 .skip-link:focus {
+  opacity: 1;
   transform: translateY(0);
 }
 
@@ -371,6 +373,27 @@ img {
   text-decoration-thickness: 2px;
 }
 
+@media screen and (width < 600px) {
+  body[data-page="disclosure"] .page-navigation-list {
+    flex-wrap: nowrap;
+    min-width: 0;
+    width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding: 0.5rem;
+    scroll-padding-inline: 0.5rem;
+  }
+
+  body[data-page="disclosure"] .page-navigation-list li {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+
+  body[data-page="disclosure"] .page-navigation-list a {
+    white-space: nowrap;
+  }
+}
+
 .page-shell {
   display: grid;
   gap: 2rem;
@@ -454,16 +477,6 @@ img {
   gap: 0.75rem;
 }
 
-.hero-school-name {
-  max-width: 24ch;
-  color: var(--primary);
-  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
-  font-size: 1.25rem;
-  line-height: 1.25;
-  text-align: left;
-  text-wrap: balance;
-}
-
 .eyebrow {
   color: var(--muted);
   color: color-mix(in srgb, var(--accent) 70%, var(--text) 30%);
@@ -542,8 +555,9 @@ img {
   order: -1;
   color: var(--primary);
   font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-size: clamp(1.25rem, 6vw, 2.5rem);
   line-height: 1.25;
+  white-space: nowrap;
 }
 
 .card,
@@ -744,6 +758,10 @@ img {
 .academics-banner img {
   height: clamp(11rem, 30vw, 22rem);
   object-fit: cover;
+}
+
+.academic-stages {
+  align-items: start;
 }
 
 .academic-stage {
@@ -1235,11 +1253,6 @@ dd {
     font-size: 2.75rem;
   }
 
-  .hero-school-name {
-    font-size: 1.5rem;
-  }
-
-  .hero-school-name,
   .hero-inner h1,
   .hero .eyebrow,
   .hero-tagline,
@@ -1281,6 +1294,10 @@ dd {
 
   .stats-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .stat-value {
+    font-size: clamp(1.25rem, 3vw, 2.5rem);
   }
 
   .stat-item:nth-child(n) {
@@ -1351,7 +1368,6 @@ dd {
 
   .academic-stages {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: 1fr;
   }
 }
 
@@ -1403,6 +1419,7 @@ dd {
     overflow: visible;
   }
 
+  .skip-link,
   .scroll-controls,
   .back-to-top,
   .disclosure-controls .button {
