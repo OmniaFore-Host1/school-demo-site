@@ -122,9 +122,9 @@ window.SITE_CONTENT = {
       { heading: "Commerce", text: "English, Accountancy, Business Studies, Economics, Mathematics", demo: true },
       { heading: "Humanities", text: "English, History, Political Science, Geography, Economics", demo: true }
     ],
-    booksHeading: "Sample book list",
+    booksHeading: "Book list",
     booksDemo: true,
-    booksNote: "Sample titles only; this is not a purchase list.",
+    booksNote: "Demo titles only; this is not a purchase list.",
     bookPublisherLabel: "Publisher",
     bookEditionLabel: "Edition",
     books: [
@@ -176,7 +176,7 @@ window.SITE_CONTENT = {
     sarasLabel: "CBSE SARAS affiliation details",
     sarasUrlBase: "https://saras.cbse.gov.in/SARAS/AffiliatedList/AfflicationDetails/",
     demoRecordLabel: "View demo record",
-    demoCatalogueDate: "Sample catalogue date: 10 November 2026",
+    demoCatalogueDate: "Catalogue date: 10 November 2026",
     demoRecordNote: "Demo record; actual certificate not attached.",
     sections: [
       {
@@ -292,7 +292,7 @@ window.SITE_CONTENT = {
       note: "Try DEMO-TC-001 to view the demonstration record.",
       searchLabel: "Search",
       records: [
-        { number: "DEMO-TC-001", text: "Sample Student A; Class V; sample issue date 1 April 2026; demonstration record only." }
+        { number: "DEMO-TC-001", text: "Demo Student A; Class V; demo issue date 1 April 2026; demonstration record only." }
       ],
       noMatch: "No matching demo record."
     }
